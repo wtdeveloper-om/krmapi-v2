@@ -1,0 +1,218 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role {
+  user
+  doctor
+  admin
+}
+
+model User {
+  id              String   @id @default(uuid())
+
+  name            String
+  mobile          String?  @unique
+  email           String?  @unique
+  googleOAuth     String?  @unique
+
+  googleVerified  Boolean  @default(false)
+  mobileVerified  Boolean  @default(false)
+
+  role            Role     @default(user)
+  isPatient       Boolean  @default(false)
+
+  profilePic      String?
+  age             Int?
+  dob             DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  refreshTokens   RefreshToken[]
+  routines        UserRoutine[]
+  redeemPoints    RedeemPoints?
+  redeemHistory   RedeemHistory[]
+  recipes         Recipe[]
+
+  diseases        UserDisease[]
+
+  // 🔹 FIX: two relations
+  patientConsultations ConsultationHistory[] @relation("UserConsultation")
+  doctorConsultations  ConsultationHistory[] @relation("DoctorConsultation")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  tokenHash String
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+
+model Disease {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  icon        String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       UserDisease[]
+}
+
+model UserDisease {
+  id        String @id @default(uuid())
+  userId    String
+  diseaseId String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  disease Disease @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, diseaseId])
+}
+
+model UserRoutine {
+  id         String   @id @default(uuid())
+  userId     String
+
+  wakeupTime String
+  sleepTime  String
+  freeTime   String?
+  routine    String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RedeemPoints {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  points    Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RedeemHistory {
+  id         String   @id @default(uuid())
+  userId     String
+  pointsUsed Int
+  redeemType String
+  redeemFor  String
+  redeemDate DateTime
+
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Video {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  thumbnail   String?
+  videoUrl    String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Reel {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  thumbnail   String?
+  reelUrl     String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Blog {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String?
+  thumbnail   String?
+  blogUrl     String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+model Recipe {
+  id            String   @id @default(uuid())
+  userId        String
+
+  title         String
+  slug          String   @unique
+  description   String?
+  thumbnail     String?
+  timeToPrepare String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Tip {
+  id        String   @id @default(uuid())
+  tip       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ConsultationHistory {
+  id          String   @id @default(uuid())
+
+  userId      String
+  doctorId    String
+
+  pointsSpent Int
+  duration    String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User @relation("UserConsultation", fields: [userId], references: [id], onDelete: Cascade)
+  doctor User @relation("DoctorConsultation", fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([doctorId])
+}
+
+
+model ConsultationPackage {
+  id            String   @id @default(uuid())
+  pointsNeeded  Int
+  duration      String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
