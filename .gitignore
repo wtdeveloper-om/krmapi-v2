@@ -2,3 +2,4 @@ node_modules
 .env
 /src/config/firebase-service-account.json
 /generated/prisma
+/src/config/serviceAccountKey.json
