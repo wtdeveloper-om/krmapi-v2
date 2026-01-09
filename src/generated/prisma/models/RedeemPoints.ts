@@ -395,14 +395,6 @@ export type RedeemPointsUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RedeemPointsUpdateToOneWithWhereWithoutUserInput, Prisma.RedeemPointsUpdateWithoutUserInput>, Prisma.RedeemPointsUncheckedUpdateWithoutUserInput>
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type RedeemPointsCreateWithoutUserInput = {
   id?: string
   points?: number

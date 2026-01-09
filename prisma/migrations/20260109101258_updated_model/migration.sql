@@ -1,14 +1,45 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `Check` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `status` VARCHAR(191) NOT NULL DEFAULT 'connected',
 
-  - You are about to drop the column `disease` on the `user` table. All the data in the column will be lost.
-  - You are about to drop the column `interests` on the `user` table. All the data in the column will be lost.
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-*/
--- AlterTable
-ALTER TABLE `user` DROP COLUMN `disease`,
-    DROP COLUMN `interests`,
-    MODIFY `role` ENUM('user', 'doctor', 'admin') NOT NULL DEFAULT 'user';
+-- CreateTable
+CREATE TABLE `User` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `mobile` VARCHAR(191) NULL,
+    `email` VARCHAR(191) NULL,
+    `googleOAuth` VARCHAR(191) NULL,
+    `googleVerified` BOOLEAN NOT NULL DEFAULT false,
+    `mobileVerified` BOOLEAN NOT NULL DEFAULT false,
+    `role` ENUM('user', 'doctor', 'admin') NOT NULL DEFAULT 'user',
+    `isPatient` BOOLEAN NOT NULL DEFAULT false,
+    `profilePic` VARCHAR(191) NULL,
+    `age` INTEGER NULL,
+    `dob` DATETIME(3) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `User_mobile_key`(`mobile`),
+    UNIQUE INDEX `User_email_key`(`email`),
+    UNIQUE INDEX `User_googleOAuth_key`(`googleOAuth`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `RefreshToken` (
+    `id` VARCHAR(191) NOT NULL,
+    `tokenHash` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `expiresAt` DATETIME(3) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `RefreshToken_userId_idx`(`userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Disease` (
@@ -166,6 +197,9 @@ CREATE TABLE `ConsultationPackage` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `RefreshToken` ADD CONSTRAINT `RefreshToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `UserDisease` ADD CONSTRAINT `UserDisease_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -188,7 +222,3 @@ ALTER TABLE `ConsultationHistory` ADD CONSTRAINT `ConsultationHistory_userId_fke
 
 -- AddForeignKey
 ALTER TABLE `ConsultationHistory` ADD CONSTRAINT `ConsultationHistory_doctorId_fkey` FOREIGN KEY (`doctorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- RedefineIndex
-CREATE INDEX `RefreshToken_userId_idx` ON `RefreshToken`(`userId`);
-DROP INDEX `RefreshToken_userId_fkey` ON `refreshtoken`;

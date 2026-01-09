@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Check: 'Check',
   User: 'User',
   RefreshToken: 'RefreshToken',
   Disease: 'Disease',
@@ -81,6 +82,14 @@ export const TransactionIsolationLevel = {
 } as const
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const CheckScalarFieldEnum = {
+  id: 'id',
+  status: 'status'
+} as const
+
+export type CheckScalarFieldEnum = (typeof CheckScalarFieldEnum)[keyof typeof CheckScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -268,6 +277,13 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const CheckOrderByRelevanceFieldEnum = {
+  status: 'status'
+} as const
+
+export type CheckOrderByRelevanceFieldEnum = (typeof CheckOrderByRelevanceFieldEnum)[keyof typeof CheckOrderByRelevanceFieldEnum]
 
 
 export const NullsOrder = {

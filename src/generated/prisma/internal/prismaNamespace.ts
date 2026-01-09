@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  Check: 'Check',
   User: 'User',
   RefreshToken: 'RefreshToken',
   Disease: 'Disease',
@@ -413,10 +414,76 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "refreshToken" | "disease" | "userDisease" | "userRoutine" | "redeemPoints" | "redeemHistory" | "video" | "reel" | "blog" | "recipe" | "tip" | "consultationHistory" | "consultationPackage"
+    modelProps: "check" | "user" | "refreshToken" | "disease" | "userDisease" | "userRoutine" | "redeemPoints" | "redeemHistory" | "video" | "reel" | "blog" | "recipe" | "tip" | "consultationHistory" | "consultationPackage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    Check: {
+      payload: Prisma.$CheckPayload<ExtArgs>
+      fields: Prisma.CheckFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CheckFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CheckFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload>
+        }
+        findFirst: {
+          args: Prisma.CheckFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CheckFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload>
+        }
+        findMany: {
+          args: Prisma.CheckFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload>[]
+        }
+        create: {
+          args: Prisma.CheckCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload>
+        }
+        createMany: {
+          args: Prisma.CheckCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.CheckDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload>
+        }
+        update: {
+          args: Prisma.CheckUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload>
+        }
+        deleteMany: {
+          args: Prisma.CheckDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CheckUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.CheckUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckPayload>
+        }
+        aggregate: {
+          args: Prisma.CheckAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCheck>
+        }
+        groupBy: {
+          args: Prisma.CheckGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CheckCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckCountAggregateOutputType> | number
+        }
+      }
+    }
     User: {
       payload: Prisma.$UserPayload<ExtArgs>
       fields: Prisma.UserFieldRefs
@@ -1380,6 +1447,14 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const CheckScalarFieldEnum = {
+  id: 'id',
+  status: 'status'
+} as const
+
+export type CheckScalarFieldEnum = (typeof CheckScalarFieldEnum)[keyof typeof CheckScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1567,6 +1642,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const CheckOrderByRelevanceFieldEnum = {
+  status: 'status'
+} as const
+
+export type CheckOrderByRelevanceFieldEnum = (typeof CheckOrderByRelevanceFieldEnum)[keyof typeof CheckOrderByRelevanceFieldEnum]
+
+
 export const NullsOrder = {
   first: 'first',
   last: 'last'
@@ -1725,6 +1807,13 @@ export type ConsultationPackageOrderByRelevanceFieldEnum = (typeof ConsultationP
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
  * Reference to a field of type 'String'
  */
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
@@ -1742,13 +1831,6 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Role'
  */
 export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
@@ -1860,6 +1942,7 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  check?: Prisma.CheckOmit
   user?: Prisma.UserOmit
   refreshToken?: Prisma.RefreshTokenOmit
   disease?: Prisma.DiseaseOmit
